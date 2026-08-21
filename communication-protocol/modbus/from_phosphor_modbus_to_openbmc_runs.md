@@ -157,6 +157,32 @@ UART 11 at 1E79:0500 --> ttyS10
 
 ## phosphor-modbus
 
+build _phosphor-modbus_ on host machine : 
+
+1. clone from github and source cross-platform toolchain
+
+2. install sdbus++ at sdbusplus/tools repo 
+
+   python3 -m venv .venv
+
+   source .venv/bin/activate
+
+   python install -e .
+
+3. install systemd-dev : sudo apt-get install -y systemd-dev libsystemd-dev pkg-config
+
+4. meson setup build -Dmocked-test-device=enabled -Dtests=enabled \
+    -Dcpp_std=c++23 -Dwerror=false -Dwarning_level=1                # not so strict
+
+5. ninja -C build test
+
+6. ninja install
+
+scp to QEMU?
+
+there need to be rethink whether the arm cross platform compile chain can install on x86_64?
+
+
 
 # Chapter 07 : How a hardware becomes D-Bus object?
 
