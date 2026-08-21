@@ -132,3 +132,40 @@ Add meson option for rtu timeout with a default value of 1 second. This timeout 
 /rtu/device/power_monitor_module.hpp .cpp
 
 Add a new PowerMonitorModule device type to support Panasonic BJBPM102A0001, Artesyn 7000433970000, and Delta ECD70000020 power monitor module devices over Modbus RTU.
+
+# Chapter 03 : How to add phosphor-modbus or other phosphor-* service to openbmc?
+
+
+
+# Chapter 04 : How to test RS485 between AST2600 and a mcu?
+
+1. check ttyS* at MIMO addr
+
+dmesg | grep tty
+
+UART 5 at 1E78:4000 --> ttyS4
+VUART 1 at 1E78:7000 --> ttyS13
+UART 3 at 1E78:E000 --> ttyS2
+UART 4 at 1E78:F000 --> ttyS3
+UART 10 at 1E79:0400 --> ttyS9
+UART 11 at 1E79:0500 --> ttyS10
+
+# Chapter 05 : How to use phosphor-modbus or other phosphor-* service to openbmc?
+
+
+# Chapter 06 : How a daemon runs?
+
+## phosphor-modbus
+
+
+# Chapter 07 : How a hardware becomes D-Bus object?
+
+## entity manager
+
+detection daemon
+
+fru-device : scans all available I2C buses for IPMI FRU EEPROM devices, parse IPMI FRU data and publish to D-Bus in the name of _xyz.openbmc_project.FruDevice_
+
+# Chapter 07 : phosphor-dbus-interface
+
+
