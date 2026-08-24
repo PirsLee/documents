@@ -192,6 +192,103 @@ detection daemon
 
 fru-device : scans all available I2C buses for IPMI FRU EEPROM devices, parse IPMI FRU data and publish to D-Bus in the name of _xyz.openbmc_project.FruDevice_
 
+The first line of the code committed is entity_manager.cpp / fre_device.cpp
+
+Entity : 
+
+**dir :: entity_manager**
+
+entity_manager.hpp
+
+- EntityManager
+
+configuration.hpp
+
+- Configuration
+
+dbus_interface.hpp
+
+- EMDBusInterface
+
+devices.hpp
+
+- ExportTemplate
+
+expression.hpp
+
+- Operation
+
+log_device_inventory.hpp
+
+- INvAddRemoveInfo
+
+object_mapper.hpp
+
+overlay.hpp
+
+perform_probe.hpp
+
+- PerformProbe
+
+perform_scan.hpp
+
+- DBusDeviceDEscriptor
+
+- PerformScan
+
+power_status_monitor.hpp
+
+- PowerStatusMonitor
+
+probe_type.hpp
+
+- probe_type_codes
+
+topology.hpp
+
+- AssocName
+
+- Topology
+
+utils.hpp
+
+**dir :: fru_device**
+
+fru_device.cpp
+
+- FruDetails
+
+- FindDevicesWithCallback
+
+fru_reader.hpp
+
+- FRUReader
+
+fru_utils.hpp
+
+- DecodeState
+
+- resCodes
+
+- fruAreas
+
+- FruArea
+
+**dir :: gpio-presence**
+
+config_provider.hpp
+
+- ConfigProvider
+
+device_presence.hpp
+
+- DevicePresence
+
+gpio_presence_manager.hpp
+
+- GPIOPresenceManager
+
+
 # Chapter 07 : phosphor-dbus-interface
 
 
