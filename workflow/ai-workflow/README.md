@@ -1,1 +1,1 @@
-# The Ability to Create Skills
+# The Ability to Get Skills
