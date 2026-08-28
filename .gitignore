@@ -1,7 +1,3 @@
-build*/*
-subprojects/*
-!subprojects/*.wrap
-!subprojects/.clang-tidy
-!subprojects/.clang-format
 *.o
-openbmc/sdbusplus
+.github
+.vscode

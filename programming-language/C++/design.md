@@ -1,5 +1,0 @@
-# Chapter 01
-
-- pass entity by reference / shared_ptr<> 
-
-- 

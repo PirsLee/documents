@@ -457,3 +457,74 @@ Modbus协议测试
 **test_sensor_base**
 
 传感器基类测试辅助
+
+
+# 10条业务流程的起点（触发源）
+
+3类触发源：
+
+- 外部事件（EntityManager配置下发）
+
+- 内部编排（DeviceManager启动）
+
+- 轮询/请求（定时或查询）
+
+## 设备发现流程
+
+启动时主动扫描
+
+DeviceManager::discoverConfigs() 
+
+## 设备配置加载流程
+
+外部D-Bus事件
+
+processConfigAdded()收到EntityManager配置添加信号
+
+## 设备实例化流程
+
+内部编排
+
+processDeviceAdded()在配置加载后调用
+
+## 设备事件处理流程
+
+设备状态变化事件
+
+Events事件系统+NotifyWatch监听
+
+## 端口连接建立流程
+
+外部D-Bus事件
+
+processPortAdded()收到端口添加信号
+
+## Modbus命令执行流程
+
+设备数据读写请求
+
+Modbus::readHoldingRegisters() / writeMultipleRegisters()被设备调用
+
+## Modbus消息处理流程
+
+命令执行流程内部
+
+ModbusCommands内部封装消息
+
+## 传感器数据采集流程
+
+定时轮询
+
+设备轮询协程（cleanupStoppedDevice监控其生命周期）
+
+## 固件信息查询流程
+
+查询请求
+
+DeviceFirmware被查询请求触发
+
+## 库存信息管理流程
+
+外部D-Bus事件
+
+processInventoryAdded()收到库存添加信号
