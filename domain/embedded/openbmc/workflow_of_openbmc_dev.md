@@ -1,4 +1,4 @@
-# Process
+# Workflow
 
 ## 1 From recipes to openbmc
 
@@ -185,10 +185,4 @@ reason : the binary version of phosphor-dbus-interface and phosphor-modbus doesn
 ## 3 Revise Web app
 
 
-# Master Level of OpenBMC
 
-## Aug 25
-
-- know how the entitymanager runs, but details of it still obscured.
-
-- poor level of C++.
