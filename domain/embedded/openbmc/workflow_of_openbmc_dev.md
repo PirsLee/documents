@@ -452,8 +452,15 @@ Yocto 提供了 BB_GIT_SHALLOW 系列变量，可以让 fetcher 尝试只拉取 
 
 `KERNEL_VERSION_SANITY_SKIP = "1"`以跳过版本检查
 
-然后清理旧任务并重新构建
+然后重新构建
 
-`bitbake -c cleansstate linux-aspeed`
 
 `devtool build linux-aspeed`
+
+注意 3 ： 后续修改内核代码在本地的linux中，且每次修改后必须git commit，因为devtool build只认已经提交的改动，之后重新构建devtool build linux-aspeed或者bitbake obmc-phosphor-image
+
+注意 4 ： 结束开发
+
+`devtool finish linux-aspeed`
+
+`devtool reset linux-aspeed`
