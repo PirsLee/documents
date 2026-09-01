@@ -217,7 +217,7 @@ reason : the binary version of phosphor-dbus-interface and phosphor-modbus doesn
 
 **查看系统日志中UART驱动探测记录**
 
-`dmsg | grep -i tty`
+`dmesg | grep -i tty`
 
 `dmesg | grep -i uart`
 
@@ -361,9 +361,9 @@ step 04
 **重启BMC进入U-BOOT命令行**
 **在U-BOOT中**
 
-`setenv ipaddr 192.168.0.80`
+`setenv ipaddr 板子ip`
 
-`setenv serverip 192.168.0.11`
+`setenv serverip host-ip`
 
 `tftp 0x83000000 fitImage`
 
@@ -464,3 +464,8 @@ Yocto 提供了 BB_GIT_SHALLOW 系列变量，可以让 fetcher 尝试只拉取 
 `devtool finish linux-aspeed`
 
 `devtool reset linux-aspeed`
+
+
+## 5 一些问题
+
+### 
