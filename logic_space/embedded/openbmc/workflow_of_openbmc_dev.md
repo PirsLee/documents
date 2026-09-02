@@ -191,17 +191,6 @@ reason : the binary version of phosphor-dbus-interface and phosphor-modbus doesn
 
 ### 4.1 开发调试阶段需要频繁烧录镜像验证
 
-**01 将镜像scp到BMC**
-
-`scp ~/obmc/.../deploy/image/... root@<BMC_IP>:/tmp`
-
-**02 查看当前Flash分区**
-
-`cat /proc/mtd`
-
-**03 写入整个Flash**
-
-`flashcp -v /tmp/... /dev/mtdN`
 
 ### 4.2 查看OpenBMC配置了哪些串口
 
