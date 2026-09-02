@@ -4,6 +4,10 @@
 
 [最重要的事情二：浅克隆](#bitbake浅克隆)
 
+[最重要的事情三：固定commit](#固定commit)
+
+[最重要的事情四：跟最新的镜像](#跟踪最新镜像)
+
 ## 1 From recipes to openbmc
 
 ### configure the openbmc to support new hardware
@@ -356,7 +360,7 @@ step 04
 
 `tftp 0x83000000 fitImage`
 
-`bootm 0x83000000`
+`sf update 0x83000000 0 0x4000000`
 
 [TFTP](#在开发机上启动TFTP服务)
 
@@ -454,6 +458,13 @@ Yocto 提供了 BB_GIT_SHALLOW 系列变量，可以让 fetcher 尝试只拉取 
 
 `devtool reset linux-aspeed`
 
+### 4.10 固定commit
+
+rebase
+
+### 4.11 跟踪最新镜像
+
+基于最新的镜像开发，到时候更新的时候就可以跟的上。
 
 ## 5 一些问题
 
@@ -463,3 +474,99 @@ Yocto 提供了 BB_GIT_SHALLOW 系列变量，可以让 fetcher 尝试只拉取 
 ### SPI烧录器与UBOOT烧录
 
 SPI烧录器适合空片、量产、变砖烧录；UBOOT适合开发迭代。
+
+## 6 烧写镜像
+
+传递镜像的时候，可以使用tftp就用tftp
+
+[tftp有关](#46-为ast2600配置设备树)
+
+如果不行就用
+
+`sudo bash -c 'sx --xmodem /path/to/Image > /dev/ttyUSB0 < /dev/ttyUSB0'`
+
+BMC侧打开
+
+`loady 0x83000000`
+
+首先探测SPI Flash
+
+`sf probe 0:0`
+
+然后擦除对应的空间，这里以Flash 64MB为例，烧写image-bmc镜像
+
+`sf erase 0x0 0x4000000`
+
+`sf write 0x83000000 0x0 ${filesize}`
+
+## 7 一次AspeedTech OpenBMC Image构建过程
+
+clone官方源码（例如clone 09.06）
+
+git clone https://github.com/AspeedTech-BMC/openbmc.git aspeed_v0906
+git checkout v09.06
+
+进入git目录顶层源码树，执行：
+
+`source setup evb-ast2600`
+
+创建自己的layer
+
+[Understanding and Creating Layers](https://docs.yoctoproject.org/dev-manual/layers.html)
+
+配置缓存！！！
+
+添加phosphor-service [临时添加进入image](#build-a-needed-service-into-image)
+
+phosphor服务二进制可以在开发阶段通过ssh进入BMC
+
+构建产物
+
+build/evb-ast2600/tmp/work/armv7ahf-neon-linux-gnueabi/phosphor-my-service/<version>/packages-root/usr/bin/phosphor-my-service
+
+在 BMC 上创建 overlay 文件系统（避免改坏根文件系统）
+
+mkdir -p /tmp/persist/usr /tmp/persist/work/usr
+
+mount -t overlay -o lowerdir=/usr,upperdir=/tmp/persist/usr,workdir=/tmp/persist/work/usr overlay /usr
+
+从宿主机拷贝ipx包并递归scp复制
+
+`cd ~/aspeed/aspeed_v1103/build/evb-ast2600/tmp/deploy/ipk/armv7ahf-vfpv4d16`
+
+`mkdir -p /tmp/pm-extract && cd /tmp/pm-extract`
+
+`ar x ~/aspeed/aspeed_v1103/build/evb-ast2600/tmp/deploy/ipk/armv7ahf-vfpv4d16/phosphor-modbus_0.1+git0+549ba60872-r0_armv7ahf-vfpv4d16.ipk`(注意此处是带git的ipx包)
+
+`zstd -d data.tar.zst -o data.tar`
+
+`tar -xf data.tar`
+
+`find . -type f`
+
+`scp -r * root@<BMC_IP>:/`
+
+`systemctl daemon-reload`
+
+`systemctl enable xyz.openbmc_project.ModbusRTU.service`
+
+`systemctl start xyz.openbmc_project.ModbusRTU.service`
+
+`systemctl status xyz.openbmc_project.ModbusRTU.service`
+
+在bmc设置静态ip
+
+设为静态
+ipmitool lan set 1 ipsrc static
+
+设置 IP
+ipmitool lan set 1 ipaddr 192.168.1.166
+
+设置子网掩码
+ipmitool lan set 1 netmask 255.255.255.0
+
+设置默认网关
+ipmitool lan set 1 defgw ipaddr 192.168.1.1
+
+确认
+ipmitool lan print 1
