@@ -607,3 +607,90 @@ ipmitool lan print 1
 ## 9 内核打Patch
 
 [11.Using Quilt in Your Workflow](https://docs.yoctoproject.org/dev/dev-manual/quilt.html)
+
+`bitbake -c devshell virtual/kernel`
+
+`quilt new 0001-my-patch.patch`
+
+`quilt add arch/arm/boot/dts/aspeed-ast2600-evb.dts`
+
+`编辑待修改文件`
+
+`quilt refresh`
+
+为patch文件加入上游信息
+
+From: Mickian <kaii7368616f@foxmail.com>
+
+Data: Mon, 3 Jun 2024 15:30:00 +0800
+
+Subject: \[PATCH] enable uart1
+
+Upstream-Status: Inappropriate
+
+Reason: This patch is for enabling UART1 on the AST2600 evaluation board. It modifies the device tree source file to set the status of UART1 to "okay", allowing it to be used by the system.
+
+Signed-off-by: Mickian <kaii7368616f@foxmail.com>
+
+`将patch/目录下的补丁文件复制到meta-cdu/recipes-kernel/linux/linux-aspeed`
+
+`在meta-cdu/recipes-kernel/linux/中新建linux-aspeed_%.bbappend`
+
+`FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"`
+
+`SRC_URI += "file://0001-enable-uart1.patch"`
+
+重新`bitbake -c compile -f virtual/kernel`
+
+## 10 为OpenBMC添加包管理工具
+
+在conf/local.conf中
+
+EXTRA_IMAGE_FEATURES:append += " package-management"
+
+IMAGE_INSTALL:append = " opkg"
+
+## 11 注意修改patch要清空sstate重新构建
+
+bitbake -c cleansstate virtual/kernel
+
+bitbake -c cleansstate obmc-phosphor-image
+
+
+## 12 添加devtool如opkg
+
+在conf/local.conf中添加安装进入镜像
+
+在BMC端配置opkg
+
+在/etc/opkg目录下新建customfeed.conf，并写入
+
+`src/gz all http://192.168.1.100:8080/all`
+
+`src/gz armv7ahf-vfpv4d16 http://192.168.1.100:8080/armv7ahf-vfpv4d16`
+
+在开发机ipk目录启动server服务器
+
+`python3 -m http.server 8080 &`
+
+然后可以bitbake想要的服务
+
+注意bitbake之后需要手动更新package-index
+
+`bitbake package-index`
+
+之后需要
+
+`opkg update`
+
+然后
+
+`opkg install <package>`
+
+## 13 一个SPI Flash AHB-Window问题
+
+解决方案是缩减设备树中的SPI Flash大小为64MB，适配硬件大小
+
+[PATCH 05/10 spi: aspeed: Adjust direct mapping to device size](https://lwn.net/ml/linux-kernel/20220214094231.3753686-6-clg@kaod.org/)
+
+[Call for testing: spi-mem driver for Aspeed SMC controllers](https://lists.ozlabs.org/pipermail/openbmc/2022-March/029723.html)
