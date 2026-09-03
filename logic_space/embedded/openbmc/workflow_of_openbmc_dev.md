@@ -570,3 +570,40 @@ ipmitool lan set 1 defgw ipaddr 192.168.1.1
 
 确认
 ipmitool lan print 1
+
+## 8 bitbake过程中出现do_fetch错误
+
+**以linux为例**
+
+1 先确认分支是否存在
+
+`git ls-remote --heads https://github.com/openbmc/linux | grep dev-6.18`
+
+2 如果分支存在，排查网络问题
+
+`ping -c github.com`
+
+`curl -I https://github.com/openbmc/linux`
+
+3 手动将仓库clone到缓存目录
+
+注意：linux源码非常大，使用shadow clone
+
+`git clone --bare --mirror https://github.com/openbmc/linux ~/.cache/bitbake/downloads/git2/github.com.openbmc.linux`
+
+
+4 切换到所需要分支
+
+`cd ~/.cache/bitbake/downloads/git2/github.com.openbmc.linux`
+
+`git fetch origin dev-6.18`
+
+重试需要删缓存
+
+`rm -rf ~/.cache/bitbake/downloads/git2/github.com.openbmc.linux`
+
+`bitbake -c clean virtual/kernel`
+
+## 9 内核打Patch
+
+[11.Using Quilt in Your Workflow](https://docs.yoctoproject.org/dev/dev-manual/quilt.html)
