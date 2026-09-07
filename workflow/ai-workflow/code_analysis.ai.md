@@ -20,17 +20,13 @@ code-review-graph serve
 添加.code-review-graphignore文件，以忽略不需要的文件
 ```
 
-2 在agent中使用MCP工具
+## 第二步：宏观一点
 
 使用`/architecture_map`生成架构概览
 
-`使用list_flows_tool列出按关键度排序的执行流程`生成执行流 
-
-`使用get_flow_tool获取单个执行流的详情，从入口点追踪<某个执行流>的调用链`生成执行流调用链
-
 `使用list_communities_tool列出检测到的代码社区`生成代码社区列表
 
-`使用get_community_tool获取单个社区的详情，解释代码社区与业务概念的对应关系`生成社区与概念映射表
+`使用get_community_tool获取单个社区的详情，解释代码社区`
 
 `使用get_architecture_overview_tool生成基于社区结构的架构概览`
 
@@ -38,33 +34,30 @@ code-review-graph serve
 
 `使用get_bridge_nodes_tool查找架构瓶颈`
 
-## 第二步：explore-codebase
+## 第三步：微观一点
 
-理解/path/to/code这一个codebase
+使用explore-codebase理解/path/to/code这一个codebase
 
-**后面要把skills的执行编排起来，不过目前不需要，因为我感觉编排了好没意思**
+## 第四步：再微观一点
 
-## 第三步：挖掘业务流程
+这个codebase都有哪些业务流程？
 
-都有哪些业务流程？
+业务流程对应哪些执行流程？
 
-每条业务流程都做了什么？
+## 第五步：再再微观一点
 
-每条业务流程的概念链条是什么？
+`使用list_flows_tool列出按关键度排序的执行流程`生成执行流 
 
-每条业务流程的入口在哪里？
+`使用get_flow_tool获取单个执行流的详情，从入口点追踪<某个执行流>的调用链`生成执行流调用链
 
-每条业务流程涉及哪些控制流？
+`这条执行流的从入口到出口的执行逻辑是什么？`
 
-每条业务流程的节点都有什么行为？
+## 第六步：追踪数据流
 
-每个业务流程的执行流程（从入口点追踪调用链）？
+这个codebase都有什么数据流？
 
-## 第四步：追踪数据流
+数据用的什么数据结构处理的？
 
-举例针对具体场景的完整追踪提示词：
-
-    "Trace the complete data flow for this scenario: A user clicks 'Open' on a tool card in the Hub dashboard. Start from the React onClick handler in Dashboard.jsx. Follow it through the backend, through the tool's auth, until the user lands on the tool's homepage already logged in. List every file touched, every function called, every network request made. Don't skip steps."
-
+针对数据结构，有哪些依托于这些数据结构的算法来处理了什么事情？
 
 ## 第五步：软件最小生成元
