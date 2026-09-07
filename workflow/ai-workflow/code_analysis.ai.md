@@ -24,16 +24,6 @@ code-review-graph serve
 
 使用`/architecture_map`生成架构概览
 
-`使用list_communities_tool列出检测到的代码社区`生成代码社区列表
-
-`使用get_community_tool获取单个社区的详情，解释代码社区`
-
-`使用get_architecture_overview_tool生成基于社区结构的架构概览`
-
-`使用get_hub_nodes_tool查找连接最多的节点（架构热点）`生成架构热点
-
-`使用get_bridge_nodes_tool查找架构瓶颈`
-
 ## 第三步：微观一点
 
 使用explore-codebase理解/path/to/code这一个codebase
@@ -42,19 +32,13 @@ code-review-graph serve
 
 这个codebase都有哪些业务流程？
 
-业务流程对应哪些执行流程？
-
 ## 第五步：再再微观一点
 
-`使用list_flows_tool列出按关键度排序的执行流程`生成执行流 
-
-`使用get_flow_tool获取单个执行流的详情，从入口点追踪<某个执行流>的调用链`生成执行流调用链
-
-`这条执行流的从入口到出口的执行逻辑是什么？`
+`使用list_flows_tool列出按关键度排序的执行流程，列出执行流列表，并使用get_flow_tool获取每个执行流的详情，即从入口到出口的执行流逻辑与调用链，描述的尽可能详细且保持语言简练`
 
 ## 第六步：追踪数据流
 
-这个codebase都有什么数据流？
+这个codebase都有什么“核心”数据流？
 
 数据用的什么数据结构处理的？
 
