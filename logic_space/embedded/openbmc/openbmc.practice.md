@@ -285,13 +285,17 @@ exit
 典型开发流程
 
 ```
-devtool modify sourcode.c
+devtool modify phosphor-modbus
 
 cd build/workspace/sources
 
-devtool build
+git add -A
 
-devtool finish：自动生成patch+bbappend
+git commit -m "rtu:xxx"
+
+devtool build phosphor-modbus
+
+devtool update-recipe <recipe> -a /meta-your-custom
 ```
 
 **这里为什么是virtual/kenel？**
