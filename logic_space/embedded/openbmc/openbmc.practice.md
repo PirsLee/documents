@@ -78,23 +78,32 @@ BMC侧打开
 
 `sudo systemctl restart tftpd-hpa`
 
-还需要在开发机上配置一下目录，暂时忘记了，后续遇到再查找。
+在开发机配置tftp目录
+
+```
+cat /etc/default/tftpd-hpa 
+
+TFTP_USERNAME="tftp"
+TFTP_DIRECTORY="/srv/tftp"   自己的tftp镜像目录
+TFTP_ADDRESS=":69"
+TFTP_OPTIONS="--secure"
+```
 
 ### SPI Programmer烧录镜像
 
-# 0 锻体：SCM模块
+# 0 SCM模块
 
 ## 0.0 需要CPLD的理由
 
-## 0.1 钢筋铜骨：SCM设计
+## 0.1 SCM设计
 
-## 0.2 堪比合金：SCM打板验证
+## 0.2 SCM打板验证
 
-# 1 炼气：OpenBMC软件栈
+# 1 OpenBMC软件栈
 
 本篇讲解OpenBMC怎么构建、上板以及使用的流程。
 
-## 1.1 炼气一层：开发板镜像烧录
+## 1.1 开发板镜像烧录
 
 首先，在开发机上构建出镜像，然后烧录到开发板上。
 
@@ -182,7 +191,7 @@ git checkout v11.03
 
 [SPI烧录](#spi-programmer烧录镜像)
 
-## 1.2 炼气二层：内置服务安装
+## 1.2 内置服务安装
 
 首先在开发机上构建服务，之后再通过包管理同步到开发板上完成安装。
 
@@ -224,7 +233,7 @@ IMAGE_INSTALL:append = " opkg"
 
 注意bitbake之后需要手动更新package-index`bitbake package-index`，之后需要在BMC中执行`opkg update`，然后`opkg install <package>`。
 
-## 1.3 炼气三层：Yocto开发流程
+## 1.3 Yocto开发流程
 
 ### 你自己的meta
 
@@ -289,6 +298,8 @@ devtool modify phosphor-modbus
 
 cd build/workspace/sources
 
+修改
+
 git add -A
 
 git commit -m "rtu:xxx"
@@ -320,7 +331,7 @@ virtual/就是解决这个问题的抽象层
 这样一来，所有依赖内核的地方只需要写 DEPENDS = "virtual/kernel" 或 bitbake -c devshell virtual/kernel，不需要关心底层具体是哪个内核——切换内核时只需改一行配置，其他地方自动跟着变。
 ```
 
-## 1.4 炼气四层：在板上玩耍
+## 1.4 在板上玩耍
 
 ### 为BMC配置静态IP
 
@@ -475,7 +486,7 @@ name = Type field defined in entitymanager configuration file
 
 ### phosphor-pid-control
 
-## 1.5 炼气五层：炼丹
+## 1.5 炼丹
 
 ### 修改内核设备树
 
@@ -552,13 +563,13 @@ devtool reset phosphor-modbus
 
 
 
-# 2 筑基：CDU业务
+# 2 CDU业务
 
 
-# 3 结丹：OpenBMC体系
+# 3 OpenBMC体系
 
-# 4 元婴
+# 4 
 
-# 5 化神
+# 5 
 
-# 6 大乘
+# 6 
